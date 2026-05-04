@@ -2,11 +2,122 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFearGreedIndex } from "../services/greedFearIndex";
 import { fetchTopCoins } from "../services/coingecko";
+import { fetchCoinById } from "../services/coingecko";
+import { useParams } from "react-router-dom";
 
 const CoinDetail = () => {
+  const { id } = useParams();
+
+  const {
+    data: coin,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["coin", id],
+    queryFn: () => fetchCoinById(id),
+  });
+
+  if (isLoading) {
+    return <div>Loading Coin Details...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div>
-      <h1></h1>
+      <div
+        className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8
+      bg-white rounded-lg shadow-md"
+      >
+        <p>Started in: {coin?.genesis_date}</p>
+        <p>
+          Price (USD): ${coin?.market_data?.current_price?.usd.toLocaleString()}
+        </p>
+        <p>
+          Price (SGD): $
+          {coin?.market_data?.current_price?.sgd?.toLocaleString()}
+        </p>
+        <p>
+          Market Cap:{" "}
+          {`USD ${coin?.market_data?.market_cap?.usd?.toLocaleString()}`} /{" "}
+          {`SGD ${coin?.market_data?.market_cap?.sgd?.toLocaleString()}`}
+        </p>
+        <p>
+          24h Change:{" "}
+          {coin?.market_data?.price_change_percentage_24h ? (
+            <span
+              className={
+                coin.market_data.price_change_percentage_24h > 0
+                  ? "text-green-600"
+                  : "text-red-600"
+              }
+            >
+              {coin.market_data.price_change_percentage_24h > 0 ? "↑" : "↓"}{" "}
+              {coin.market_data.price_change_percentage_24h.toFixed(2)}%
+            </span>
+          ) : (
+            "N/A"
+          )}
+        </p>
+        <p>
+          7d Change:{" "}
+          {coin?.market_data?.price_change_percentage_7d ? (
+            <span
+              className={
+                coin.market_data.price_change_percentage_7d > 0
+                  ? "text-green-600"
+                  : "text-red-600"
+              }
+            >
+              {coin.market_data.price_change_percentage_7d > 0 ? "↑" : "↓"}{" "}
+              {coin.market_data.price_change_percentage_7d.toFixed(2)}%
+            </span>
+          ) : (
+            "N/A"
+          )}
+        </p>
+        <p>
+          30d Change:{" "}
+          {coin?.market_data?.price_change_percentage_30d ? (
+            <span
+              className={
+                coin.market_data.price_change_percentage_30d > 0
+                  ? "text-green-600"
+                  : "text-red-600"
+              }
+            >
+              {coin.market_data.price_change_percentage_30d > 0 ? "↑" : "↓"}{" "}
+              {coin.market_data.price_change_percentage_30d.toFixed(2)}%
+            </span>
+          ) : (
+            "N/A"
+          )}
+        </p>
+      </div>
+      <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8 mt-4 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
+        <p className="text-gray-600 mb-4 text-lg">{coin?.description?.en}</p>
+      </div>
+      <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8 mt-4 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Links</h2>
+        <a
+          href={coin?.links?.homepage?.[0]}
+          className="text-blue-600 hover:underline block mb-2"
+          target="_blank"
+        >
+          Homepage
+        </a>
+        <a
+          href={coin?.links?.whitepaper}
+          className="text-blue-600 hover:underline block"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Whitepaper
+        </a>
+      </div>
     </div>
   );
 };
