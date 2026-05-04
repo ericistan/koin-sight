@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchFearGreedIndex } from "../services/greedFearIndex";
 import { fetchTopCoins } from "../services/coingecko";
 import { fetchCoinById } from "../services/coingecko";
@@ -10,15 +10,31 @@ import {
   fetchWatchlist,
 } from "../services/airtable";
 
-const CoinDetail = () => {
+const CoinDetail = ({ coin, watchlist }) => {
   const [isInWatchlist, setIsInWatchlist] = React.useState(false);
   const [airTableRecordID, setAirTableRecordID] = React.useState(null);
+  const queryClient = useQueryClient();
+
+  React.useEffect(() => {
+    if (watchlist && coin) {
+      const found = watchlist.find((item) => item.coinId === coin.id);
+      if (found) {
+        setIsInWatchlist(true);
+        setAirTableRecordID(found.id);
+      } else {
+        setIsInWatchlist(false);
+        setAirTableRecordID(null);
+      }
+    }
+  }, [watchlist, coin]);
 
   const addMutation = useMutation({
-    mutationFn: (data) => addToWatchlist(data.coinId, data.coinName),
+    mutationFn: (data) =>
+      addToWatchlist(data.coinId, data.coinName, data.coinImage),
     onSuccess: (response) => {
       setIsInWatchlist(true);
       setAirTableRecordID(response.id);
+      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
     },
   });
 
@@ -27,27 +43,9 @@ const CoinDetail = () => {
     onSuccess: () => {
       setIsInWatchlist(false);
       setAirTableRecordID(null);
+      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
     },
   });
-
-  const { id } = useParams();
-
-  const {
-    data: coin,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["coin", id],
-    queryFn: () => fetchCoinById(id),
-  });
-
-  if (isLoading) {
-    return <div>Loading Coin Details...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
     <div>
@@ -60,7 +58,11 @@ const CoinDetail = () => {
           onClick={() =>
             isInWatchlist
               ? deleteMutation.mutate(airTableRecordID)
-              : addMutation.mutate({ coinId: coin.id, coinName: coin.name })
+              : addMutation.mutate({
+                  coinId: coin.id,
+                  coinName: coin.name,
+                  coinImage: coin.image.small,
+                })
           }
         >
           {isInWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}

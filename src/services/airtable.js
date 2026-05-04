@@ -14,10 +14,11 @@ export const fetchWatchlist = async () => {
   }));
 };
 
-export const addToWatchlist = async (coinId, coinName) => {
+export const addToWatchlist = async (coinId, coinName, coinImage) => {
   const createdRecord = await table.create({
     coinId: coinId,
     coinName: coinName,
+    coinImage: coinImage,
   });
   return {
     id: createdRecord.id, // This is Airtable's auto-generated ID
