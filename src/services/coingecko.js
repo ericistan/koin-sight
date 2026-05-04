@@ -8,7 +8,6 @@ export const fetchTopCoins = async () => {
     `${BASE_URL}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1`,
   );
 
-  // Always check if the response is ok — fetch() doesn't throw on 4xx/5xx errors
   if (!response.ok) {
     throw new Error("Failed to fetch coins");
   }
