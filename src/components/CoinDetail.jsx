@@ -1,11 +1,35 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchFearGreedIndex } from "../services/greedFearIndex";
 import { fetchTopCoins } from "../services/coingecko";
 import { fetchCoinById } from "../services/coingecko";
 import { useParams } from "react-router-dom";
+import {
+  addToWatchlist,
+  deleteFromWatchlist,
+  fetchWatchlist,
+} from "../services/airtable";
 
 const CoinDetail = () => {
+  const [isInWatchlist, setIsInWatchlist] = React.useState(false);
+  const [airTableRecordID, setAirTableRecordID] = React.useState(null);
+
+  const addMutation = useMutation({
+    mutationFn: (data) => addToWatchlist(data.coinId, data.coinName),
+    onSuccess: (response) => {
+      setIsInWatchlist(true);
+      setAirTableRecordID(response.id);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (recordId) => deleteFromWatchlist(recordId),
+    onSuccess: () => {
+      setIsInWatchlist(false);
+      setAirTableRecordID(null);
+    },
+  });
+
   const { id } = useParams();
 
   const {
@@ -31,6 +55,16 @@ const CoinDetail = () => {
         className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8
       bg-white rounded-lg shadow-md"
       >
+        <button
+          className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          onClick={() =>
+            isInWatchlist
+              ? deleteMutation.mutate(airTableRecordID)
+              : addMutation.mutate({ coinId: coin.id, coinName: coin.name })
+          }
+        >
+          {isInWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
+        </button>
         <p>Started in: {coin?.genesis_date}</p>
         <p>
           Price (USD): ${coin?.market_data?.current_price?.usd.toLocaleString()}
