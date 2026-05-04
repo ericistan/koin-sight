@@ -4,8 +4,8 @@ import React from "react";
 const Navbar = () => {
   return (
     <div>
-      <nav className="bg-gray-800 p-4">
-        <ul className="flex space-x-4">
+      <nav className="bg-gray-800 py-4">
+        <ul className="flex space-x-4 max-w-6xl mx-auto">
           <li>
             <Link to="/" className="text-white hover:text-gray-300">
               Home

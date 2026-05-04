@@ -1,5 +1,3 @@
-// src/services/coingecko.js
-
 const BASE_URL = "https://api.coingecko.com/api/v3";
 
 // Fetches top 20 coins by market cap

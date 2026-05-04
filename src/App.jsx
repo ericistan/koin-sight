@@ -5,6 +5,7 @@ import NavBar from "./components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage";
 import Watchlist from "./pages/WatchlistPage";
+import CoinDetailPage from "./pages/CoinDetailPage";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/coins/:id" element={<CoinDetailPage />} />
           <Route path="/watchlist" element={<Watchlist />} />
         </Routes>
       </div>
