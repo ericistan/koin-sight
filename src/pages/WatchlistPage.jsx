@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const WatchlistPage = ({ watchlist, isLoading }) => {
+const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
   if (isLoading) {
     return <div>Loading Watchlist...</div>;
   }
@@ -11,17 +11,20 @@ const WatchlistPage = ({ watchlist, isLoading }) => {
       <h1 className="text-3xl font-bold text-blue-600 text-center mb-4">
         Watchlist
       </h1>
-      {watchlist && watchlist.length > 0 ? (
+      {airTableWatchlist && airTableWatchlist.length > 0 ? (
         <ul>
-          {watchlist.map((coin) => (
-            <Link to={`/coins/${coin.coinId}`}>
-              <li key={coin.id} className="border p-4 mb-2 rounded">
+          {airTableWatchlist.map((coin) => (
+            <Link to={`/coins/${coin.gecko.id}`}>
+              <li
+                key={coin.id}
+                className="border p-4 mb-2 rounded hover:bg-gray-50 cursor-pointer"
+              >
                 <img
-                  src={coin.coinImage}
-                  alt={coin.coinName}
+                  src={coin.gecko.image}
+                  alt={coin.gecko.name}
                   className="w-10 h-10 inline-block mr-2"
                 />
-                {coin.coinName}
+                {coin.gecko.name}
               </li>
             </Link>
           ))}

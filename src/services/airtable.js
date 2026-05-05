@@ -10,7 +10,11 @@ export const fetchWatchlist = async () => {
   const records = await table.select().all();
   return records.map((record) => ({
     id: record.id,
-    ...record.fields,
+    gecko: {
+      id: record.fields.coinId,
+      name: record.fields.coinName,
+      image: record.fields.coinImage,
+    },
   }));
 };
 
@@ -21,8 +25,12 @@ export const addToWatchlist = async (coinId, coinName, coinImage) => {
     coinImage: coinImage,
   });
   return {
-    id: createdRecord.id, // This is Airtable's auto-generated ID
-    ...createdRecord.fields,
+    id: createdRecord.id,
+    gecko: {
+      id: createdRecord.fields.coinId,
+      name: createdRecord.fields.coinName,
+      image: createdRecord.fields.coinImage,
+    },
   };
 };
 

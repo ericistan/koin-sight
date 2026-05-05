@@ -10,14 +10,14 @@ import {
   fetchWatchlist,
 } from "../services/airtable";
 
-const CoinDetail = ({ coin, watchlist }) => {
+const CoinDetail = ({ coin, airTableWatchlist }) => {
   const [isInWatchlist, setIsInWatchlist] = React.useState(false);
   const [airTableRecordID, setAirTableRecordID] = React.useState(null);
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
-    if (watchlist && coin) {
-      const found = watchlist.find((item) => item.coinId === coin.id);
+    if (airTableWatchlist && coin) {
+      const found = airTableWatchlist.find((item) => item.gecko.id === coin.id);
       if (found) {
         setIsInWatchlist(true);
         setAirTableRecordID(found.id);
@@ -26,7 +26,7 @@ const CoinDetail = ({ coin, watchlist }) => {
         setAirTableRecordID(null);
       }
     }
-  }, [watchlist, coin]);
+  }, [airTableWatchlist, coin]);
 
   const addMutation = useMutation({
     mutationFn: (data) =>

@@ -17,7 +17,7 @@ const App = () => {
     retry: 1, // Only retry once (default is 3)
   });
 
-  const { data: watchlist, isLoading: watchlistLoading } = useQuery({
+  const { data: airTableWatchlist, isLoading: watchlistLoading } = useQuery({
     queryKey: ["watchlist"],
     queryFn: fetchWatchlist,
   });
@@ -34,12 +34,12 @@ const App = () => {
           <Route
             path="/watchlist"
             element={
-              <Watchlist watchlist={watchlist} isLoading={watchlistLoading} />
+              <Watchlist airTableWatchlist={airTableWatchlist} isLoading={watchlistLoading} />
             }
           />
           <Route
             path="/coins/:id"
-            element={<CoinDetailPage watchlist={watchlist} />}
+            element={<CoinDetailPage airTableWatchlist={airTableWatchlist} />}
           />
         </Routes>
       </div>
