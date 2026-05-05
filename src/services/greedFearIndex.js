@@ -1,22 +1,25 @@
 // src/services/greedFearIndex.js
 
-const BASE_URL = "https://api.alternative.me/fng/";
+const API_KEY = import.meta.env.VITE_COINMARKETCAP_API_KEY;
+const BASE_URL =
+  "https://pro-api.coinmarketcap.com/v3/fear-and-greed/historical";
 
 export const fetchFearGreedIndex = async () => {
-  const response = await fetch(BASE_URL);
+  try {
+    const response = await fetch(`${BASE_URL}?limit=30`, {
+      headers: {
+        "X-CMC_PRO_API_KEY": API_KEY,
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch Fear & Greed Index");
+    if (!response.ok) {
+      throw new Error("Failed to fetch Fear & Greed Index");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching Fear & Greed Index:", error);
+    throw error;
   }
-
-  const json = await response.json();
-
-  // We only need the first item in the data array
-  // and we convert value from string to number here
-  // so components never have to worry about it
-  return {
-    score: Number(json.data[0].value),
-    classification: json.data[0].value_classification,
-    timestamp: json.data[0].timestamp,
-  };
 };
