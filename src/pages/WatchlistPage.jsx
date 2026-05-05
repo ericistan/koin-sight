@@ -22,7 +22,7 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
                 <img
                   src={coin.gecko.image}
                   alt={coin.gecko.name}
-                  className="w-10 h-10 inline-block mr-2"
+                  className="w-8 h-8 inline-block mr-2"
                 />
                 {coin.gecko.name}
               </li>
