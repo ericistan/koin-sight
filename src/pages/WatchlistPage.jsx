@@ -8,7 +8,7 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
 
   return (
     <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8">
-      <h1 className="text-3xl font-bold text-blue-600 text-center mb-4">
+      <h1 className="text-3xl font-bold text-cyan-400 text-center mb-4">
         Watchlist
       </h1>
       {airTableWatchlist && airTableWatchlist.length > 0 ? (
@@ -17,7 +17,7 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
             <Link to={`/coins/${coin.gecko.id}`}>
               <li
                 key={coin.id}
-                className="border p-4 mb-2 rounded hover:bg-gray-50 cursor-pointer"
+                className="border-b border-white/10 p-4 mb-2 rounded-lg hover:bg-white/5 cursor-pointer text-white"
               >
                 <img
                   src={coin.gecko.image}
@@ -30,7 +30,7 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
           ))}
         </ul>
       ) : (
-        <p className="text-center text-gray-600">No coins in watchlist</p>
+        <p className="text-center text-gray-400">No coins in watchlist</p>
       )}
     </div>
   );

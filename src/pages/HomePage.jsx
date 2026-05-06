@@ -11,12 +11,12 @@ const HomePage = ({ coins, isLoading }) => {
       coin.symbol.toLowerCase().includes(searchQuery.toLowerCase()),
   );
   return (
-    <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8">
-      <h1 className="text-3xl font-bold text-emerald-600 mb-4 text-center">
+    <div className="w-full md:max-w-3xl lg:max-w-6xl mx-auto px-4 md:p-6 lg:p-8">
+      <h1 className="text-3xl font-bold text-emerald-400 mb-4 text-center">
         Welcome to KoinSight
       </h1>
       {/* <FearGreedMeter /> */}
-      <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+      <h2 className="text-xl font-semibold text-gray-300 mb-4 text-center">
         Top 20 Coins
       </h2>
       <input
@@ -24,7 +24,7 @@ const HomePage = ({ coins, isLoading }) => {
         placeholder="Search by name or symbol..."
         value={searchQuery}
         onChange={(event) => setSearchQuery(event.target.value)}
-        className="w-full mb-4 p-2 border border-gray-300 rounded"
+        className="w-full mb-4 p-2 border border-white/20 bg-white/10 backdrop-blur-md text-white placeholder-gray-400 rounded-lg"
       />
       <CoinTable coins={filteredCoins} isLoading={isLoading} />
     </div>

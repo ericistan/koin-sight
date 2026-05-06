@@ -8,20 +8,20 @@ const CoinTable = ({ coins, isLoading, onAddToWatchlist, onViewDetails }) => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div>
-      <table className="w-full border-collapse border border-gray-300">
-        <thead className="bg-gray-100">
+    <div className="overflow-x-auto rounded-lg">
+      <table className="w-full border-collapse border-b border-white/10">
+        <thead className="bg-white/10 backdrop-blur-md">
           <tr>
-            <th className="border border-gray-300 p-2 text-left">Name</th>
-            <th className="border border-gray-300 p-2 text-left">Symbol</th>
-            <th className="border border-gray-300 p-2 text-left">Price</th>
-            <th className="border border-gray-300 p-2 text-left">Market Cap</th>
+            <th className="border-b border-white/10 p-2 text-left text-white">Name</th>
+            <th className="border-b border-white/10 p-2 text-left text-white">Symbol</th>
+            <th className="border-b border-white/10 p-2 text-left text-white">Price</th>
+            <th className="border-b border-white/10 p-2 text-left text-white">Market Cap</th>
           </tr>
         </thead>
         <tbody>
           {coins?.map((coin) => (
-            <tr key={coin.id} className="hover:bg-gray-50">
-              <td className="border border-gray-300 p-2">
+            <tr key={coin.id} className="border-b border-white/10 hover:bg-white/5 text-white">
+              <td className="p-2">
                 <Link to={`/coins/${coin.id}`}>
                   <div className="flex flex-row items-center gap-2 cursor-pointer">
                     <img src={coin.image} alt={coin.name} className="w-6 h-6" />
@@ -29,15 +29,15 @@ const CoinTable = ({ coins, isLoading, onAddToWatchlist, onViewDetails }) => {
                   </div>
                 </Link>
               </td>
-              <td className="border border-gray-300 p-2">
+              <td className="p-2">
                 <Link to={`/coins/${coin.id}`}>
                   {coin.symbol.toUpperCase()}
                 </Link>
               </td>
-              <td className="border border-gray-300 p-2">
+              <td className="p-2">
                 ${coin.current_price?.toLocaleString()}
               </td>
-              <td className="border border-gray-300 p-2">
+              <td className="p-2">
                 ${coin.market_cap?.toLocaleString()}
               </td>
             </tr>
