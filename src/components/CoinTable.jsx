@@ -1,10 +1,26 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchFearGreedIndex } from "../services/greedFearIndex";
-import { fetchTopCoins } from "../services/coingecko";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { addToWatchlist, deleteFromWatchlist } from "../services/airtable";
 
-const CoinTable = ({ coins, isLoading, onAddToWatchlist, onViewDetails }) => {
+const CoinTable = ({ coins, isLoading, airTableWatchlist }) => {
+  const queryClient = useQueryClient();
+
+  const addMutation = useMutation({
+    mutationFn: (data) =>
+      addToWatchlist(data.coinId, data.coinName, data.coinImage),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (recordId) => deleteFromWatchlist(recordId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
+    },
+  });
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -23,6 +39,9 @@ const CoinTable = ({ coins, isLoading, onAddToWatchlist, onViewDetails }) => {
             </th>
             <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
               Market Cap
+            </th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+              Watchlist
             </th>
           </tr>
         </thead>
@@ -47,6 +66,37 @@ const CoinTable = ({ coins, isLoading, onAddToWatchlist, onViewDetails }) => {
               </td>
               <td className="p-4">${coin.current_price?.toLocaleString()}</td>
               <td className="p-4">${coin.market_cap?.toLocaleString()}</td>
+              <td className="p-4">
+                {(() => {
+                  const isInWatchlist = airTableWatchlist?.some(
+                    (w) => w.gecko.id === coin.id,
+                  );
+                  const watchlistRecord = airTableWatchlist?.find(
+                    (w) => w.gecko.id === coin.id,
+                  );
+
+                  return (
+                    <button
+                      onClick={() =>
+                        isInWatchlist
+                          ? deleteMutation.mutate(watchlistRecord.id)
+                          : addMutation.mutate({
+                              coinId: coin.id,
+                              coinName: coin.name,
+                              coinImage: coin.image,
+                            })
+                      }
+                      className="px-3 py-1 text-xs font-medium rounded transition-colors duration-200"
+                      style={{
+                        backgroundColor: isInWatchlist ? "#ef4444" : "#10b981",
+                        color: "white",
+                      }}
+                    >
+                      {isInWatchlist ? "Remove" : "Add"}
+                    </button>
+                  );
+                })()}
+              </td>
             </tr>
           ))}
         </tbody>

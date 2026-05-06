@@ -1,5 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCoinById } from "../services/coingecko";
+import BorderGlow from "../components/reactBits/BorderGlow";
+import ShinyText from "../components/reactBits/ShinyText";
 
 const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
   if (isLoading) {
@@ -8,44 +12,27 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
 
   return (
     <div className="mt-20 max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto px-4 md:p-6 lg:p-8">
-      <h1 className="text-3xl md:text-4xl font-semibold text-white text-center mb-8">
-        Your Watchlist
-      </h1>
+      <div className="text-6xl md:text-6xl font-semibold text-center mb-8">
+        <ShinyText
+          text="WATCHLIST"
+          speed={2}
+          delay={0}
+          color="#3acb55"
+          shineColor="rgb(126, 230, 145)"
+          spread={120}
+          direction="left"
+          yoyo={false}
+          pauseOnHover
+          disabled={false}
+        />
+      </div>
       {airTableWatchlist && airTableWatchlist.length > 0 ? (
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
           {airTableWatchlist.map((coin) => (
-            <Link to={`/coins/${coin.gecko.id}`} key={coin.id}>
-              <div className="w-full h-full bg-white/10 backdrop-blur-lg border border-white/20 p-4 rounded-2xl hover:bg-white/15 cursor-pointer text-white flex flex-col items-center transition-all duration-200 shadow-lg">
-                <img
-                  src={coin.gecko.image}
-                  alt={coin.gecko.name}
-                  className="w-8 h-8 inline-block mb-3"
-                />
-                <span className="text-xs font-medium text-center">
-                  {coin.gecko.name}
-                </span>
-              </div>
-            </Link>
+            <CoinCard key={coin.id} coinId={coin.gecko.id} coin={coin.gecko} />
           ))}
         </div>
       ) : (
-        // <ul>
-        //   {airTableWatchlist.map((coin) => (
-        //     <Link to={`/coins/${coin.gecko.id}`}>
-        //       <li
-        //         key={coin.id}
-        //         className="border-b border-white/10 p-4 mb-2 rounded-lg hover:bg-white/5 cursor-pointer text-white"
-        //       >
-        //         <img
-        //           src={coin.gecko.image}
-        //           alt={coin.gecko.name}
-        //           className="w-8 h-8 inline-block mr-2"
-        //         />
-        //         {coin.gecko.name}
-        //       </li>
-        //     </Link>
-        //   ))}
-        // </ul>
         <div className="text-center py-12">
           <p className="text-gray-400 text-sm">
             No coins in your watchlist yet
@@ -56,6 +43,44 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
         </div>
       )}
     </div>
+  );
+};
+
+const CoinCard = ({ coinId, coin }) => {
+  const { data: fullCoin } = useQuery({
+    queryKey: ["coin", coinId],
+    queryFn: () => fetchCoinById(coinId),
+    staleTime: 24 * 60 * 60 * 1000,
+    gcTime: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  return (
+    <BorderGlow
+      edgeSensitivity={30}
+      glowColor="40 80 80"
+      backgroundColor="#0F1323"
+      borderRadius={28}
+      glowRadius={40}
+      glowIntensity={1}
+      coneSpread={25}
+      animated={false}
+      colors={["#c084fc", "#f472b6", "#38bdf8"]}
+    >
+      <div style={{ padding: "2.5em" }}>
+        <Link to={`/coins/${coinId}`}>
+          <div className="w-full cursor-pointer text-white flex flex-col items-center justify-center transition-all duration-200 min-h-60">
+            <img
+              src={fullCoin?.image?.large || coin.image}
+              alt={coin.name}
+              className="w-24 h-24 mb-4 rounded-full shadow-lg object-cover"
+            />
+            <span className="text-lg text-center uppercase font-medium">
+              {coin.name}
+            </span>
+          </div>
+        </Link>
+      </div>
+    </BorderGlow>
   );
 };
 

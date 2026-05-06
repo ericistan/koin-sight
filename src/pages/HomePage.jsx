@@ -3,7 +3,13 @@ import CoinTable from "../components/CoinTable";
 import FearGreedMeter from "../components/FearGreedMeter";
 import ShinyText from "../components/reactBits/ShinyText";
 
-const HomePage = ({ coins, isLoading }) => {
+const HomePage = ({
+  coins,
+  isLoading,
+  airTableWatchlist,
+  onAddToWatchlist,
+  onRemoveFromWatchlist,
+}) => {
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const filteredCoins = coins?.filter(
@@ -39,7 +45,11 @@ const HomePage = ({ coins, isLoading }) => {
         onChange={(event) => setSearchQuery(event.target.value)}
         className="w-full mb-6 px-4 py-3 border border-white/20 bg-white/10 backdrop-blur-lg text-white placeholder-gray-500 rounded-2xl text-sm focus:outline-none focus:border-white/40 focus:bg-white/15 transition-all duration-200"
       />
-      <CoinTable coins={filteredCoins} isLoading={isLoading} />
+      <CoinTable
+        coins={filteredCoins}
+        isLoading={isLoading}
+        airTableWatchlist={airTableWatchlist}
+      />
     </div>
   );
 };

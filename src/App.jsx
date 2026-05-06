@@ -8,6 +8,8 @@ import CoinDetailPage from "./pages/CoinDetailPage";
 import { useQuery } from "@tanstack/react-query";
 import { fetchWatchlist } from "./services/airtable";
 import MagicRings from "./components/reactBits/MagicRings";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addToWatchlist, deleteFromWatchlist } from "./services/airtable";
 
 const App = () => {
   const { data: coins, isLoading } = useQuery({
@@ -21,6 +23,21 @@ const App = () => {
   const { data: airTableWatchlist, isLoading: watchlistLoading } = useQuery({
     queryKey: ["watchlist"],
     queryFn: fetchWatchlist,
+  });
+
+  const addMutation = useMutation({
+    mutationFn: (data) =>
+      addToWatchlist(data.coinId, data.coinName, data.coinImage),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (recordId) => deleteFromWatchlist(recordId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
+    },
   });
 
   return (
@@ -43,7 +60,13 @@ const App = () => {
             <Routes>
               <Route
                 path="/"
-                element={<HomePage coins={coins} isLoading={isLoading} />}
+                element={
+                  <HomePage
+                    coins={coins}
+                    isLoading={isLoading}
+                    airTableWatchlist={airTableWatchlist}
+                  />
+                }
               />
               <Route
                 path="/watchlist"
