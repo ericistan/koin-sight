@@ -79,7 +79,7 @@ export default function MagicRings({
   fadeIn = 0.7,
   fadeOut = 0.5,
   followMouse = false,
-  mouseInfluence = 0.2,
+  mouseInfluence = 0,
   hoverScale = 1.2,
   parallax = 0.05,
   clickBurst = false,

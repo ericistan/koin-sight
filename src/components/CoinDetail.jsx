@@ -50,11 +50,11 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
   return (
     <div>
       <div
-        className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8
-      bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl"
+        className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-6 md:p-8 lg:p-10
+      bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl transition-all duration-300"
       >
         <button
-          className="mb-4 px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+          className="mb-6 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-colors duration-200"
           onClick={() =>
             isInWatchlist
               ? deleteMutation.mutate(airTableRecordID)
@@ -67,20 +67,26 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
         >
           {isInWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
         </button>
-        <p className="text-white">Started in: {coin?.genesis_date}</p>
-        <p className="text-white">
-          Price (USD): ${coin?.market_data?.current_price?.usd.toLocaleString()}
+        <p className="text-gray-300 text-sm mb-2">
+          Price (USD):{" "}
+          <span className="text-white font-medium">
+            ${coin?.market_data?.current_price?.usd.toLocaleString()}
+          </span>
         </p>
-        <p className="text-white">
-          Price (SGD): $
-          {coin?.market_data?.current_price?.sgd?.toLocaleString()}
+        <p className="text-gray-300 text-sm mb-2">
+          Price (SGD):{" "}
+          <span className="text-white font-medium">
+            ${coin?.market_data?.current_price?.sgd?.toLocaleString()}
+          </span>
         </p>
-        <p className="text-white">
+        <p className="text-gray-300 text-sm mb-4">
           Market Cap:{" "}
-          {`USD ${coin?.market_data?.market_cap?.usd?.toLocaleString()}`} /{" "}
-          {`SGD ${coin?.market_data?.market_cap?.sgd?.toLocaleString()}`}
+          <span className="text-white font-medium">
+            {`USD ${coin?.market_data?.market_cap?.usd?.toLocaleString()}`} /{" "}
+            {`SGD ${coin?.market_data?.market_cap?.sgd?.toLocaleString()}`}
+          </span>
         </p>
-        <p className="text-white">
+        <p className="text-gray-300 text-sm mb-2">
           24h Change:{" "}
           {coin?.market_data?.price_change_percentage_24h ? (
             <span
@@ -97,7 +103,7 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
             "N/A"
           )}
         </p>
-        <p className="text-white">
+        <p className="text-gray-300 text-sm mb-2">
           7d Change:{" "}
           {coin?.market_data?.price_change_percentage_7d ? (
             <span
@@ -114,7 +120,7 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
             "N/A"
           )}
         </p>
-        <p className="text-white">
+        <p className="text-gray-300 text-sm mb-2">
           30d Change:{" "}
           {coin?.market_data?.price_change_percentage_30d ? (
             <span
@@ -132,26 +138,32 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
           )}
         </p>
       </div>
-      <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8 mt-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl">
-        <h2 className="text-2xl font-bold text-white mb-4">Description</h2>
-        <p className="text-gray-300 mb-4 text-lg">{coin?.description?.en}</p>
+      <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-6 md:p-8 lg:p-10 mt-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl">
+        <h2 className="text-2xl font-semibold text-white mb-4">Description</h2>
+        <p className="text-gray-300 text-sm mb-2">
+          Launched in:{" "}
+          <span className="text-white font-medium">{coin?.genesis_date}</span>
+        </p>
+        <p className="text-gray-400 mb-4 text-md leading-relaxed">
+          {coin?.description?.en}
+        </p>
       </div>
-      <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8 mt-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl">
-        <h2 className="text-2xl font-bold text-white mb-4">Links</h2>
+      <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-6 md:p-8 lg:p-10 mt-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl">
+        <h2 className="text-2xl font-semibold text-white mb-4">Links</h2>
         <a
           href={coin?.links?.homepage?.[0]}
-          className="text-cyan-400 hover:underline block mb-2"
+          className="text-cyan-400 hover:text-cyan-300 block mb-3 text-sm transition-colors duration-200"
           target="_blank"
         >
-          Homepage
+          → Homepage
         </a>
         <a
           href={coin?.links?.whitepaper}
-          className="text-cyan-400 hover:underline block"
+          className="text-cyan-400 hover:text-cyan-300 block text-sm transition-colors duration-200"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Whitepaper
+          → Whitepaper
         </a>
       </div>
     </div>
