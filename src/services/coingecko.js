@@ -3,7 +3,7 @@ const BASE_URL = "https://api.coingecko.com/api/v3";
 /**
  * Retry mechanism with exponential backoff for handling rate limiting
  * Handles 429 (Too Many Requests) errors and other network failures
- * Max retries: 3, with exponential backoff (1s, 2s, 4s) + random jitter
+ * Max retries: 3, with exponential backoff (1s, 2s, 4s)
  */
 const fetchWithRetry = async (url, maxRetries = 3) => {
   for (let i = 0; i < maxRetries; i++) {
@@ -12,8 +12,11 @@ const fetchWithRetry = async (url, maxRetries = 3) => {
 
       // Handle rate limiting - wait and retry instead of failing immediately
       if (response.status === 429) {
-        const delay = Math.min(1000 * Math.pow(2, i) + Math.random() * 1000, 10000);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        const delay = Math.min(
+          1000 * Math.pow(2, i) + Math.random() * 1000,
+          10000,
+        );
+        await new Promise((resolve) => setTimeout(resolve, delay));
         continue;
       }
 
@@ -24,14 +27,17 @@ const fetchWithRetry = async (url, maxRetries = 3) => {
       return response.json();
     } catch (error) {
       if (i === maxRetries - 1) throw error;
-      const delay = Math.min(1000 * Math.pow(2, i) + Math.random() * 1000, 10000);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      const delay = Math.min(
+        1000 * Math.pow(2, i) + Math.random() * 1000,
+        10000,
+      );
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 };
 
 /**
- * Fetch top 20 cryptocurrencies by market capitalization
+ * Fetch top 20 cryptocurrencies
  * Returns: array of coins with price, market cap, and market data
  */
 export const fetchTopCoins = async () => {
@@ -48,10 +54,8 @@ export const fetchCoinById = async (id) => {
   return fetchWithRetry(url);
 };
 
-/**
+/*
  * Fetch historical price data for a coin
- * Transforms raw API data into formatted array with dates and prices
- * Returns: array of { time: string, price: number } objects
  */
 export const fetchCoinMarketChart = async (id, days = 7) => {
   const url = `${BASE_URL}/coins/${id}/market_chart?vs_currency=usd&days=${days}`;

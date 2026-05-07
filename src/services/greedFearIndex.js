@@ -1,5 +1,3 @@
-// src/services/greedFearIndex.js
-// const API_KEY = import.meta.env.VITE_COINMARKETCAP_API_KEY;
 const BASE_URL = "https://api.alternative.me/fng/";
 
 export const fetchFearGreedIndex = async () => {
