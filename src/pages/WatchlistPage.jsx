@@ -11,9 +11,9 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
   }
 
   return (
-    <div className="mt-20 max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto px-4 md:p-6 lg:p-8">
+    <div className="mt-20 max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto px-4 md:p-6 lg:p-8 overflow-x-hidden">
       <div
-        className="text-6xl md:text-6xl font-semibold text-center mb-8"
+        className="text-4xl md:text-5xl lg:text-6xl font-semibold text-center mb-8"
         style={{ fontFamily: "'Bruno Ace SC'" }}
       >
         <ShinyText
@@ -30,7 +30,7 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
         />
       </div>
       {airTableWatchlist && airTableWatchlist.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-6">
           {airTableWatchlist.map((coin) => (
             <CoinCard key={coin.id} coinId={coin.gecko.id} coin={coin.gecko} />
           ))}
@@ -70,13 +70,13 @@ const CoinCard = ({ coinId, coin }) => {
       colors={["#84fca4", "#84e6fc", "#84a2fc"]}
       className="hover:scale-105 transition-all duration-400 ease-in-out"
     >
-      <div style={{ padding: "2.5em" }}>
+      <div className="p-3 md:p-8">
         <Link to={`/coins/${coinId}`}>
           <div className="w-full cursor-pointer text-white flex flex-col items-center justify-center transition-all duration-200 min-h-60 ">
             <img
               src={fullCoin?.image?.large || coin.image}
               alt={coin.name}
-              className="w-24 h-24 mb-4 rounded-full shadow-lg object-cover"
+              className="w-24 aspect-square mb-4 rounded-full shadow-lg object-contain"
             />
             <span className="text-lg text-center uppercase font-medium">
               {coin.name}

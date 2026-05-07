@@ -38,7 +38,7 @@ const HomePage = ({
   return (
     <div className="w-full md:max-w-3xl lg:max-w-6xl mx-auto px-4 md:p-6 lg:p-8">
       <div
-        className="mb-8 mt-20 text-5xl md:text-6xl font-bold text-center"
+        className="mb-8 mt-20 text-3xl md:text-5xl lg:text-6xl font-bold text-center"
         style={{ fontFamily: "'Bruno Ace SC'" }}
       >
         <ShinyText
@@ -57,7 +57,7 @@ const HomePage = ({
 
       {fearGreedData && (
         <div className="mb-8">
-          <div className="text-center mb-8 rounded-lg flex flex-row items-center justify-center gap-2  rounded-3xl shadow-xl">
+          <div className="text-center mb-8 rounded-lg flex flex-col md:flex-row items-center justify-center gap-2 rounded-3xl shadow-xl">
             <CandlestickChart size={32} className="text-gray-300" />
             <p className="text-xl text-gray-300">Market Sentiment:</p>
             <p
