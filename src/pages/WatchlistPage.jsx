@@ -58,17 +58,18 @@ const CoinCard = ({ coinId, coin }) => {
     <BorderGlow
       edgeSensitivity={30}
       glowColor="40 80 80"
-      backgroundColor="#0F1323"
+      backgroundColor="#0f13231c"
       borderRadius={28}
       glowRadius={40}
       glowIntensity={1}
       coneSpread={25}
       animated={false}
-      colors={["#c084fc", "#f472b6", "#38bdf8"]}
+      colors={["#84fca4", "#84e6fc", "#84a2fc"]}
+      className="hover:scale-105 transition-all duration-400 ease-in-out"
     >
       <div style={{ padding: "2.5em" }}>
         <Link to={`/coins/${coinId}`}>
-          <div className="w-full cursor-pointer text-white flex flex-col items-center justify-center transition-all duration-200 min-h-60">
+          <div className="w-full cursor-pointer text-white flex flex-col items-center justify-center transition-all duration-200 min-h-60 ">
             <img
               src={fullCoin?.image?.large || coin.image}
               alt={coin.name}

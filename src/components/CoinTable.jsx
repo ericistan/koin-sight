@@ -2,6 +2,7 @@ import React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { addToWatchlist, deleteFromWatchlist } from "../services/airtable";
+import { Star } from "lucide-react";
 
 const CoinTable = ({ coins, isLoading, airTableWatchlist }) => {
   const queryClient = useQueryClient();
@@ -86,13 +87,13 @@ const CoinTable = ({ coins, isLoading, airTableWatchlist }) => {
                               coinImage: coin.image,
                             })
                       }
-                      className="px-3 py-1 text-xs font-medium rounded transition-colors duration-200"
-                      style={{
-                        backgroundColor: isInWatchlist ? "#ef4444" : "#10b981",
-                        color: "white",
-                      }}
+                      className="cursor-pointer transition-all duration-200 hover:scale-110"
                     >
-                      {isInWatchlist ? "Remove" : "Add"}
+                      {isInWatchlist ? (
+                        <Star className="fill-yellow-400 text-yellow-400 w-5 h-5" />
+                      ) : (
+                        <Star className="text-gray-400 w-5 h-5" />
+                      )}
                     </button>
                   );
                 })()}

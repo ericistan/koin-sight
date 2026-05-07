@@ -23,3 +23,18 @@ export const fetchCoinById = async (id) => {
 
   return response.json();
 };
+
+//Fetch historical chart
+export const fetchCoinMarketChart = async (id, days = 7) => {
+  const response = await fetch(
+    `${BASE_URL}/coins/${id}/market_chart?vs_currency=usd&days=${days}`,
+  );
+  if (!response.ok) {
+    throw new Error(`Failed to fetch market chart for coin: ${id}`);
+  }
+  const data = await response.json();
+  return data.prices.map(([timestamp, price]) => ({
+    time: new Date(timestamp).toLocaleDateString(),
+    price: Math.round(price * 100) / 100, // Round to 2 decimal places
+  }));
+};
