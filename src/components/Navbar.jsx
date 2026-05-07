@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import React from "react";
 import { Home, Star } from "lucide-react";
 
@@ -17,6 +17,7 @@ const Navbar = () => {
               <span className="hidden md:inline">Home</span>
             </NavLink>
           </li>
+
           <li>
             <NavLink
               to="/watchlist"

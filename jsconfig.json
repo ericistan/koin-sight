@@ -1,3 +1,5 @@
+//Had to install this for some Reactbits components to work.
+
 {
   "compilerOptions": {
     "baseUrl": ".",

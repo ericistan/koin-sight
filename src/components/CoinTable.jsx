@@ -7,6 +7,7 @@ import { Star } from "lucide-react";
 const CoinTable = ({ coins, isLoading, airTableWatchlist }) => {
   const queryClient = useQueryClient();
 
+  // Adds coin to user's watchlist in Airtable
   const addMutation = useMutation({
     mutationFn: (data) =>
       addToWatchlist(data.coinId, data.coinName, data.coinImage),
@@ -15,6 +16,7 @@ const CoinTable = ({ coins, isLoading, airTableWatchlist }) => {
     },
   });
 
+  // Removes coin from user's watchlist
   const deleteMutation = useMutation({
     mutationFn: (recordId) => deleteFromWatchlist(recordId),
     onSuccess: () => {
@@ -47,6 +49,7 @@ const CoinTable = ({ coins, isLoading, airTableWatchlist }) => {
           </tr>
         </thead>
         <tbody>
+          {/* Render each coin as a table row. Clicking directs to coin detail page*/}
           {coins?.map((coin) => (
             <tr
               key={coin.id}
@@ -60,13 +63,17 @@ const CoinTable = ({ coins, isLoading, airTableWatchlist }) => {
                   </div>
                 </Link>
               </td>
+
               <td className="p-4">
                 <Link to={`/coins/${coin.id}`}>
                   {coin.symbol.toUpperCase()}
                 </Link>
               </td>
+
               <td className="p-4">${coin.current_price?.toLocaleString()}</td>
               <td className="p-4">${coin.market_cap?.toLocaleString()}</td>
+
+              {/* Watchlist toggle button - star icon filled/unfilled based on watchlist status */}
               <td className="p-4">
                 {(() => {
                   const isInWatchlist = airTableWatchlist?.some(

@@ -1,16 +1,8 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchFearGreedIndex } from "../services/greedFearIndex";
-import { fetchTopCoins } from "../services/coingecko";
-import { fetchCoinById } from "../services/coingecko";
-import { useParams } from "react-router-dom";
 import { Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {
-  addToWatchlist,
-  deleteFromWatchlist,
-  fetchWatchlist,
-} from "../services/airtable";
+import { addToWatchlist, deleteFromWatchlist } from "../services/airtable";
 import {
   LineChart,
   Line,
@@ -28,6 +20,7 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  // Sync local state with Airtable watchlist whenever it updates
   React.useEffect(() => {
     if (airTableWatchlist && coin) {
       const found = airTableWatchlist.find((item) => item.gecko.id === coin.id);
@@ -60,7 +53,12 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
     },
   });
 
-  const { data: marketChartData, isLoading: marketChartLoading, isError: chartError } = useQuery({
+  // Fetch historical price data for the chart - cached for 7 days
+  const {
+    data: marketChartData,
+    isLoading: marketChartLoading,
+    isError: chartError,
+  } = useQuery({
     queryKey: ["coinMarketChart", coin?.id],
     queryFn: () => fetchCoinMarketChart(coin.id, 365),
     enabled: !!coin?.id,
@@ -106,7 +104,7 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
             </button>
           </div>
         </div>
-        {/* <h2 className="text-2xl font-semibold text-white">Market Data</h2> */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="h-full bg-black/10 backdrop-blur-lg border border-white/20 p-4 rounded-2xl hover:bg-white/15 flex flex-col items-center justify-center transition-all duration-200 shadow-lg space-y-2">
             <p className="text-gray-300 text-lg">
@@ -194,11 +192,16 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
         </div>
         <div className="text-white mt-6">
           <h3 className="font-semibold mb-4">(USD) Monthly Price Chart</h3>
-          {marketChartLoading && <p className="text-gray-400">Loading chart...</p>}
+          {marketChartLoading && (
+            <p className="text-gray-400">Loading chart...</p>
+          )}
           {chartError && (
-            <p className="text-gray-400">Chart temporarily unavailable. Try again later.</p>
+            <p className="text-gray-400">
+              Chart temporarily unavailable. Try again later.
+            </p>
           )}
           {!marketChartLoading && !chartError && marketChartData && (
+            //Display historical price chart using Recharts
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={marketChartData}>
                 <CartesianGrid
@@ -231,43 +234,12 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
         </div>
       </div>
 
-      {/* <div className="w-full p-4 text-white bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl mt-6">
-        <h3 className="font-semibold mb-4">Monthly Price Chart</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={marketChartData}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="rgba(255,255,255,0.1)"
-            />
-            <XAxis
-              dataKey="time"
-              stroke="rgba(255,255,255,0.5)"
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 12 }} />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#2E303D",
-                border: "1px solid rgba(255,255,255,0.2)",
-              }}
-              formatter={(value) => `$${value.toFixed(2)}`}
-            />
-            <Line
-              type="monotone"
-              dataKey="price"
-              stroke="#06DF73"
-              dot={false}
-              strokeWidth={2}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div> */}
-
       <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-6 md:p-8 lg:p-10 mt-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl">
         <h2 className="text-2xl font-semibold text-white mb-4">Description</h2>
         <p className="text-gray-300 text-sm mb-2">
           Launched in:{" "}
           <span className="text-white font-medium">
+            {/*Displays the year the coin was launched */}
             {coin?.genesis_date
               ? new Date(coin.genesis_date).getFullYear()
               : "N/A"}

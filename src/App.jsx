@@ -8,12 +8,9 @@ import CoinDetailPage from "./pages/CoinDetailPage";
 import { useQuery } from "@tanstack/react-query";
 import { fetchWatchlist } from "./services/airtable";
 import MagicRings from "./components/reactBits/MagicRings";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addToWatchlist, deleteFromWatchlist } from "./services/airtable";
 
 const App = () => {
-  const queryClient = useQueryClient();
-
+  // Fetch top 20 Crypto from CoinGecko
   const { data: coins, isLoading } = useQuery({
     queryKey: ["topCoins"],
     queryFn: fetchTopCoins,
@@ -22,32 +19,18 @@ const App = () => {
     retry: 1,
   });
 
+  // Fetch user's watchlist from Airtable
   const { data: airTableWatchlist, isLoading: watchlistLoading } = useQuery({
     queryKey: ["watchlist"],
     queryFn: fetchWatchlist,
-  });
-
-  const addMutation = useMutation({
-    mutationFn: (data) =>
-      addToWatchlist(data.coinId, data.coinName, data.coinImage),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (recordId) => deleteFromWatchlist(recordId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
-    },
   });
 
   return (
     <BrowserRouter>
       <>
         <NavBar />
-        <div className="relative min-h-screen ">
-          {/* Magic Rings Background - Fixed position behind everything */}
+        <div className="relative min-h-screen">
+          {/* Animated background effect from Reactbits*/}
           <div className="fixed inset-0 -z-10 bg-slate-950 pointer-events-none">
             <MagicRings
               color="#66DE7D"
@@ -58,6 +41,7 @@ const App = () => {
               clickBurst={false}
             />
           </div>
+
           <div className="relative z-0">
             <Routes>
               <Route
@@ -70,6 +54,7 @@ const App = () => {
                   />
                 }
               />
+
               <Route
                 path="/watchlist"
                 element={
@@ -79,6 +64,7 @@ const App = () => {
                   />
                 }
               />
+
               <Route
                 path="/coins/:id"
                 element={

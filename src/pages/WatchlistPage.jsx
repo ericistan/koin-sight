@@ -12,6 +12,7 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
 
   return (
     <div className="mt-20 max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto px-4 md:p-6 lg:p-8 overflow-x-hidden">
+      {/* h1 with animated shiny text effect*/}
       <div
         className="text-4xl md:text-5xl lg:text-6xl font-semibold text-center mb-8"
         style={{ fontFamily: "'Bruno Ace SC'" }}
@@ -21,14 +22,15 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
           speed={2}
           delay={0}
           color="#3acb55"
-          shineColor="rgb(126, 230, 145)"
+          shineColor="rgb(135, 247, 156)"
           spread={120}
           direction="left"
-          yoyo={false}
+          yoyo={true}
           pauseOnHover
           disabled={false}
         />
       </div>
+
       {airTableWatchlist && airTableWatchlist.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-6">
           {airTableWatchlist.map((coin) => (
@@ -49,6 +51,7 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
   );
 };
 
+// Individual coin card component for watchlist display
 const CoinCard = ({ coinId, coin }) => {
   const { data: fullCoin } = useQuery({
     queryKey: ["coin", coinId],
@@ -58,6 +61,7 @@ const CoinCard = ({ coinId, coin }) => {
   });
 
   return (
+    // BorderGlow component from Reactbits
     <BorderGlow
       edgeSensitivity={30}
       glowColor="40 80 80"
