@@ -1,20 +1,25 @@
-import Airtable from "airtable";
+const BASE_URL = "https://api.airtable.com/v0";
+const BASE_ID = import.meta.env.VITE_AIRTABLE_BASE_ID;
+const TABLE_NAME = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
+const API_TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
 
-// Initialize Airtable connection with API key and base ID from environment variables
-const base = new Airtable({ apiKey: import.meta.env.VITE_AIRTABLE_TOKEN }).base(
-  import.meta.env.VITE_AIRTABLE_BASE_ID,
-);
+const headers = {
+  Authorization: `Bearer ${API_TOKEN}`,
+  "Content-Type": "application/json",
+};
 
-const table = base(import.meta.env.VITE_AIRTABLE_TABLE_NAME);
-
-/**
- * Fetch all coins from user's watchlist
- * Maps Airtable records to normalized format with CoinGecko ID
- * Returns: array of { id: string, gecko: { id, name, image } } objects
- */
 export const fetchWatchlist = async () => {
-  const records = await table.select().all();
-  return records.map((record) => ({
+  const response = await fetch(`${BASE_URL}/${BASE_ID}/${TABLE_NAME}`, {
+    headers,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch watchlist: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
+  return data.records.map((record) => ({
     id: record.id, // Airtable record ID (used for updates/deletes)
     gecko: {
       id: record.fields.coinId, // CoinGecko coin ID
@@ -24,30 +29,45 @@ export const fetchWatchlist = async () => {
   }));
 };
 
-/**
- * Add a coin to the user's watchlist in Airtable
- * Returns: the newly created record with ID and coin info
- */
 export const addToWatchlist = async (coinId, coinName, coinImage) => {
-  const createdRecord = await table.create({
-    coinId: coinId,
-    coinName: coinName,
-    coinImage: coinImage,
+  const response = await fetch(`${BASE_URL}/${BASE_ID}/${TABLE_NAME}`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      fields: {
+        coinId,
+        coinName,
+        coinImage,
+      },
+    }),
   });
+
+  if (!response.ok) {
+    throw new Error(`Failed to add to watchlist: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
   return {
-    id: createdRecord.id,
+    id: data.id,
     gecko: {
-      id: createdRecord.fields.coinId,
-      name: createdRecord.fields.coinName,
-      image: createdRecord.fields.coinImage,
+      id: data.fields.coinId,
+      name: data.fields.coinName,
+      image: data.fields.coinImage,
     },
   };
 };
 
-/**
- * Remove a coin from the user's watchlist
- * Uses Airtable record ID to identify which record to delete
- */
 export const deleteFromWatchlist = async (recordId) => {
-  await table.destroy(recordId);
+  const response = await fetch(
+    `${BASE_URL}/${BASE_ID}/${TABLE_NAME}/${recordId}`,
+    {
+      method: "DELETE",
+      headers,
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete from watchlist: ${response.statusText}`);
+  }
 };
