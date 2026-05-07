@@ -1,9 +1,9 @@
 import React, { use } from "react";
 import CoinTable from "../components/CoinTable";
-import FearGreedMeter from "../components/FearGreedMeter";
 import ShinyText from "../components/reactBits/ShinyText";
 import { fetchFearGreedIndex } from "../services/greedFearIndex";
 import { useQuery } from "@tanstack/react-query";
+import { CandlestickChart } from "lucide-react";
 
 const HomePage = ({
   coins,
@@ -26,9 +26,21 @@ const HomePage = ({
     staleTime: 60 * 60 * 1000, // Cache for 1 hour
   });
 
+  const getColor = (value) => {
+    const num = parseInt(value);
+    if (num <= 20) return "#ef4444";
+    if (num <= 40) return "#f97316";
+    if (num <= 60) return "#eab308";
+    if (num <= 80) return "#22c55e";
+    return "#3b82f6";
+  };
+
   return (
     <div className="w-full md:max-w-3xl lg:max-w-6xl mx-auto px-4 md:p-6 lg:p-8">
-      <div className="mb-8 mt-20 text-5xl md:text-6xl font-bold text-center">
+      <div
+        className="mb-8 mt-20 text-5xl md:text-6xl font-bold text-center"
+        style={{ fontFamily: "'Bruno Ace SC'" }}
+      >
         <ShinyText
           text="K⌾IN SIGHT"
           speed={2}
@@ -43,27 +55,33 @@ const HomePage = ({
         />
       </div>
 
-      {/* <FearGreedMeter /> */}
       {fearGreedData && (
         <div className="mb-8">
-          <div className="text-center mb-8 p-4 bg-white/10 rounded-lg">
-            <h2 className="text-2xl text-gray-300">Market Sentiment</h2>
-            <p className="text-4xl font-bold text-white mt-4">
-              {fearGreedData.value}
+          <div className="text-center mb-8 rounded-lg flex flex-row items-center justify-center gap-2  rounded-3xl shadow-xl">
+            <CandlestickChart size={32} className="text-gray-300" />
+            <p className="text-xl text-gray-300">Market Sentiment:</p>
+            <p
+              className="text-2xl font-semibold"
+              style={{ color: getColor(fearGreedData.value) }}
+            >
+              {fearGreedData.value}%
             </p>
-            <p className="text-green-400">{fearGreedData.classification}</p>
+            <p
+              className="text-2xl font-semibold"
+              style={{ color: getColor(fearGreedData.value) }}
+            >
+              {fearGreedData.classification}
+            </p>
           </div>
         </div>
       )}
-      <h2 className="text-lg font-medium text-gray-400 mb-2  text-center">
-        View top 20 Cryptocurrencies
-      </h2>
+
       <input
         type="text"
-        placeholder="Search by name or symbol..."
+        placeholder="Search top 20 Cryptocurrencies..."
         value={searchQuery}
         onChange={(event) => setSearchQuery(event.target.value)}
-        className="w-full mb-6 px-4 py-3 border border-white/20 bg-white/10 backdrop-blur-lg text-white placeholder-gray-500 rounded-2xl text-sm focus:outline-none focus:border-white/40 focus:bg-white/15 transition-all duration-200"
+        className="w-full mb-4 px-4 py-3 border border-white/20 bg-white/10 backdrop-blur-lg text-white placeholder-gray-500 rounded-2xl text-sm focus:outline-none focus:border-white/40 focus:bg-white/15 transition-all duration-200"
       />
       <CoinTable
         coins={filteredCoins}

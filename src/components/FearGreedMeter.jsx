@@ -14,16 +14,11 @@ const FearGreedMeter = () => {
   if (isLoading) {
     return <div>Loading Fear and Greed Index...</div>;
   }
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  if (!fearGreedData) {
+    return <div className="text-white text-center">No data available</div>;
   }
 
-  const latestData = fearGreedData?.data?.[0];
-  if (!latestData) {
-    return <div>No Fear and Greed Index data available.</div>;
-  }
-
-  const score = latestData.value;
+  const score = parseInt(fearGreedData.value);
 
   const getMeterColor = (score) => {
     if (score <= 20) return "bg-red-500";
@@ -41,34 +36,34 @@ const FearGreedMeter = () => {
     return "Extreme Greed";
   };
 
+  const getColorStyle = (score) => {
+    if (score <= 20) return "#ef4444";
+    if (score <= 40) return "#f97316";
+    if (score <= 60) return "#eab308";
+    if (score <= 80) return "#22c55e";
+    return "#3b82f6";
+  };
+
   return (
     <>
-      <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8">
-        <h2 className="text-2xl font-bold text-blue-600 mb-4 text-center">
-          Crypto Fear and Greed Index
-        </h2>
-        <p>Last updated: {latestData.timestamp}</p>
-        <div className="w-full bg-gray-200 rounded-full h-6 mb-4">
-          <div
-            className={`${getMeterColor(score)} h-6 rounded-full`}
-            style={{ width: `${score}%` }}
-          ></div>
-        </div>
-        <p className="text-center text-gray-700">
-          {getMeterLabel(score)} ({score})
-        </p>
-      </div>
-
-      <div className="flex-1">
-        <div className="w-full bg-gray-200 rounded-full h-4">
-          <div
-            className={`${getColor(score)} h-4 rounded-full`}
-            style={{ width: `${score}%` }}
-          ></div>
-        </div>
-        <div className="flex justify-between text-xs text-gray-600 mt-2">
-          <span>Fear</span>
-          <span>Greed</span>
+      <div className="max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto p-4 md:p-6 lg:p-8 mb-8">
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl p-12">
+          <h2 className="text-2xl font-bold text-green-400 mb-4 text-center">
+            Market Sentiment
+          </h2>
+          <div className="w-full bg-white/10 rounded-full h-8 mb-4">
+            <div
+              className="h-8 rounded-full transition-all duration-300"
+              style={{
+                width: `${score}%`,
+                backgroundColor: getColorStyle(score),
+              }}
+            ></div>
+          </div>
+          <div className="flex justify-between items-center text-white">
+            <p className="text-lg">{getMeterLabel(score)}</p>
+            <p className="text-2xl font-bold">{score}/100</p>
+          </div>
         </div>
       </div>
     </>

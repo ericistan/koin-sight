@@ -60,12 +60,14 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
     },
   });
 
-  const { data: marketChartData, isLoading: marketChartLoading } = useQuery({
+  const { data: marketChartData, isLoading: marketChartLoading, isError: chartError } = useQuery({
     queryKey: ["coinMarketChart", coin?.id],
     queryFn: () => fetchCoinMarketChart(coin.id, 365),
     enabled: !!coin?.id,
-    staleTime: 7 * 24 * 60 * 60 * 1000, // 7 days
-    gcTime: 30 * 24 * 60 * 60 * 1000, // 30 days
+    staleTime: 7 * 24 * 60 * 60 * 1000,
+    gcTime: 30 * 24 * 60 * 60 * 1000,
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
   });
 
   return (
@@ -192,34 +194,40 @@ const CoinDetail = ({ coin, airTableWatchlist }) => {
         </div>
         <div className="text-white mt-6">
           <h3 className="font-semibold mb-4">(USD) Monthly Price Chart</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={marketChartData}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(255,255,255,0.1)"
-              />
-              <XAxis
-                dataKey="time"
-                stroke="rgba(255,255,255,0.5)"
-                tick={{ fontSize: 12 }}
-              />
-              <YAxis stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 12 }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#2E303D",
-                  border: "1px solid rgba(255,255,255,0.2)",
-                }}
-                formatter={(value) => `$${value.toFixed(2)}`}
-              />
-              <Line
-                type="monotone"
-                dataKey="price"
-                stroke="#06DF73"
-                dot={false}
-                strokeWidth={2}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          {marketChartLoading && <p className="text-gray-400">Loading chart...</p>}
+          {chartError && (
+            <p className="text-gray-400">Chart temporarily unavailable. Try again later.</p>
+          )}
+          {!marketChartLoading && !chartError && marketChartData && (
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={marketChartData}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(255,255,255,0.1)"
+                />
+                <XAxis
+                  dataKey="time"
+                  stroke="rgba(255,255,255,0.5)"
+                  tick={{ fontSize: 12 }}
+                />
+                <YAxis stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 12 }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#2E303D",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                  }}
+                  formatter={(value) => `$${value.toFixed(2)}`}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="price"
+                  stroke="#06DF73"
+                  dot={false}
+                  strokeWidth={2}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
 

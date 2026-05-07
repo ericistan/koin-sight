@@ -12,6 +12,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToWatchlist, deleteFromWatchlist } from "./services/airtable";
 
 const App = () => {
+  const queryClient = useQueryClient();
+
   const { data: coins, isLoading } = useQuery({
     queryKey: ["topCoins"],
     queryFn: fetchTopCoins,

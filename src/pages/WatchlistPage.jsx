@@ -12,9 +12,12 @@ const WatchlistPage = ({ airTableWatchlist, isLoading }) => {
 
   return (
     <div className="mt-20 max-w-sm md:max-w-3xl lg:max-w-6xl mx-auto px-4 md:p-6 lg:p-8">
-      <div className="text-6xl md:text-6xl font-semibold text-center mb-8">
+      <div
+        className="text-6xl md:text-6xl font-semibold text-center mb-8"
+        style={{ fontFamily: "'Bruno Ace SC'" }}
+      >
         <ShinyText
-          text="WATCHLIST"
+          text="Watchlist"
           speed={2}
           delay={0}
           color="#3acb55"
