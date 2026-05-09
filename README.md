@@ -1,8 +1,6 @@
 # Koin Sight
 
-<video width="640" autoplay loop muted>
-  <source src="https://github.com/ericistan/koin-sight/raw/main/src/assets/koin-sight-home-detail.mp4" type="video/mp4">
-</video>
+![Koin Sight Demo](./src/assets/koin-sight-home-detail.gif)
 
 A sleek cryptocurrency tracking dashboard that provides real-time market insights, personalized watchlists, and fear & greed index analysis.
 
@@ -37,9 +35,7 @@ The project is built with:
 
 ### Homepage
 
-<video width="640" autoplay loop muted>
-  <source src="https://github.com/ericistan/koin-sight/raw/main/src/assets/koin-sight-home-detail.mp4" type="video/mp4">
-</video>
+![Homepage Demo](./src/assets/koin-sight-home-detail.gif)
 
 - Real-time market overview with top cryptocurrencies
 - Fear & Greed Index display with visual meter and historical trends
@@ -56,9 +52,7 @@ The project is built with:
 
 ### Watchlist
 
-<video width="640" autoplay loop muted>
-  <source src="https://github.com/ericistan/koin-sight/raw/main/src/assets/koin-sight-watchlist.mp4" type="video/mp4">
-</video>
+![Watchlist Demo](./src/assets/koin-sight-watchlist.gif)
 
 - Create and manage personal cryptocurrency watchlist
 - Save favorite coins to track
