@@ -1,6 +1,6 @@
 # Koin Sight
 
-![Koin Sight Demo](./src/assets/koin-sight-home-detail.gif)
+![Koin Sight Demo](./src/assets/)
 
 A sleek cryptocurrency tracking dashboard that provides real-time market insights, personalized watchlists, and fear & greed index analysis.
 
