@@ -2,7 +2,11 @@
 
 ![Koin Sight](./src/assets/koin-sight_homepage.jpg)
 
-A sleek cryptocurrency tracking dashboard that provides real-time market insights, personalized watchlists, and fear & greed index analysis. I made this app to help display dual currencies between USD and SGD as they are the primary currencies I use to track the market. Built with React using a polished glassmorphism design for an intuitive user experience.
+A sleek cryptocurrency tracking dashboard that provides real-time market insights, personalized watchlists, and fear & greed index analysis.
+
+I made this app to help display dual currencies between USD and SGD as they are the primary currencies I use to track the market.
+
+Built with React using a polished glassmorphism design for an intuitive user experience.
 
 ## Live Demo
 
@@ -40,7 +44,7 @@ The project is built with:
 
 ### Coin Details
 
-![Koin Sight](./src/assets/koin-sight_coin-detail.jpg)
+![Koin Sight](./src/assets/koin-sight_detail-page.jpg)
 
 - Comprehensive coin information including price in USD/SGD, market cap, price changes, and token details.
 - Interactive price charts with Recharts
@@ -126,6 +130,16 @@ VITE_AIRTABLE_TABLE_NAME= [your_table_name]
 ```
 
 CoinGecko and Fear & Greed Index APIs do not require authentication because they are public APIs, so no additional keys are needed for those services.
+
+CoinGecko API:
+
+- Base URL: https://api.coingecko.com/api/v3
+- Documentation: https://docs.coingecko.com/
+
+Fear & Greed Index API:
+
+- Base URL: https://api.alternative.me/fng/
+- Documentation: https://alternative.me/crypto/fear-and-greed-index/
 
 ## Key Components
 
