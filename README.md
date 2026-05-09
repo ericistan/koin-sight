@@ -10,7 +10,7 @@ Built with React using a polished glassmorphism design for an intuitive user exp
 
 ## Live Demo
 
-https://koin-sight.netlify.app
+https://koinsight.netlify.app
 
 ## Technology Stack
 
